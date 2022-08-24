@@ -32,7 +32,7 @@ summary({
 src_files = files(
   'loguru.hpp',
   'loguru.cpp',
-  'proc_def_shim.cpp',
+  #'proc_def_shim.cpp',
   'reg.hpp',
   'reg.cpp',
   'elf_ldr.hpp',
@@ -88,8 +88,7 @@ ida_str = '@0@_@1@_@2@_@3@'.format(ida_cpu, ida_os, ida_compiler, ida_bits)
 actual_lib_path = sdk_lib / ida_str
 ida_dep = declare_dependency(
   link_args: ['-L'+actual_lib_path, '-lida'],
-  include_directories: sdk_inc_dir,
-  is_system: true
+  include_directories: sdk_inc_dir
 )
 
 summary({

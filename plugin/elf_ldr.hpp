@@ -2,9 +2,9 @@
 #define __ELF_LDR_H
 
 #include <pro.h>
+#include <idp.hpp>
 #include <elf/elfbase.h>
 #include <elf/elf.h>
-#include <idp.hpp>
 
 struct plugin_ctx_t;
 
