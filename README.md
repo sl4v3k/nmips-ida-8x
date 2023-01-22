@@ -4,7 +4,7 @@ IDA plugin to enable nanoMIPS processor support. This is not limited to simple d
 It also supports relocations and automatic ELF detection (even though the UI might not show it, it kinda works).
 Debugging also works thanks to GDB and it also does some other stuff, such as automatic switch detections.
 
-Tested on IDA 8.0.
+Tested on IDA 8.2.
 
 To see how well it works, with the mipscoder binary from 0CTF, see below :)
 You can disassemble, decompile and even debug it!
