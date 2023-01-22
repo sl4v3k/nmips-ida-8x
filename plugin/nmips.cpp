@@ -571,41 +571,49 @@ bool protect_data(void* addr, size_t size, bool write_enable)
 
 void plugin_ctx_t::enable_plugin(bool enable)
 {
-    if (enable) {
-        relocations->enable_hooks(true);
-        // this is very hacky, but I think needed so that we can change the names everywhere :/
-        size_t idx = 0;
-        const char** reg_names = (const char**)PH.reg_names;
-
-        // Pls ilfak let me override the register names fully, so I don't have to do this.
-        void* reg_addr = (void*) reg_names;
-        size_t mask =  ~(page_size() - 1);
-        void* reg_page = (void*)((size_t)reg_addr & mask);
-        protect_data(reg_page, page_size()*2, true);
-        // TODO: error checking
-        processor_t* curr = get_ph();
-        LOG("Processor: %d", curr->id);
+	processor_t* curr = get_ph();
         size_t max_regs = curr->regs_num;
-        // LOG("Assembler: %s", get_ph()->assemblers[0]->name);
-        for (auto &name: nanomips_gpr_names)
-        {
-            if (idx >= max_regs) {
-                WARN("Processor only has %ld registers, but we expect %ld! Are you sure you loaded a mips processor?", max_regs, nanomips_gpr_names.size());
-            }
-            reg_names[idx] = name.c_str();
-            idx++;
-        }
+	if (max_regs > 0)
+	{
+	    if (enable) {
+		relocations->enable_hooks(true);
+		// this is very hacky, but I think needed so that we can change the names everywhere :/
+		size_t idx = 0;
+		const char** reg_names = (const char**)PH.reg_names;
 
-        // I am too lazy to write a cross platform way to detect if the page was actually already writeable before.
-        // Blame Ilfak for this one.
-        // protect_data(reg_page, page_size()*2, false);
-    } else {
-        relocations->enable_hooks(false);
-        unregister_action("nmips:ConfigGDB");
-    }
-    hooked = enable;
-    nec_node.create(node_name);
-    nec_node.altset(0, hooked);
+		// Pls ilfak let me override the register names fully, so I don't have to do this.
+		void* reg_addr = (void*) reg_names;
+		size_t mask =  ~(page_size() - 1);
+		void* reg_page = (void*)((size_t)reg_addr & mask);
+		protect_data(reg_page, page_size()*2, true);
+		// TODO: error checking
+		//processor_t* curr = get_ph();
+		LOG("Processor: %d", curr->id);
+		//size_t max_regs = curr->regs_num;
+		// LOG("Assembler: %s", get_ph()->assemblers[0]->name);
+		for (auto &name: nanomips_gpr_names)
+		{
+		    if (idx >= max_regs) {
+			WARN("Processor only has %ld registers, but we expect %ld! Are you sure you loaded a mips processor?", max_regs, nanomips_gpr_names.size());
+		    }
+		    reg_names[idx] = name.c_str();
+		    idx++;
+		}
+
+		// I am too lazy to write a cross platform way to detect if the page was actually already writeable before.
+		// Blame Ilfak for this one.
+		// protect_data(reg_page, page_size()*2, false);
+	    } else {
+		relocations->enable_hooks(false);
+		unregister_action("nmips:ConfigGDB");
+	    }
+	    hooked = enable;
+	    nec_node.create(node_name);
+	    nec_node.altset(0, hooked);
+	}
+	else
+		WARN("No target loaded!");
+
 }
 
 void plugin_ctx_t::load_from_idb()
