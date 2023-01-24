@@ -1,4 +1,4 @@
-Tested on IDA 8.2. but doent work, both dll and so crashing.
+Tested on IDA 8.2. but doesnt work, both .dll and .so crashing.
 
 # nmips
 
