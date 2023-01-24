@@ -1,3 +1,5 @@
+Tested on IDA 8.2. but doent work, both dll and so crashing.
+
 # nmips
 
 IDA plugin to enable nanoMIPS processor support. This is not limited to simple disassembly, but fully supports decompilation and even fixes up the stack in certain functions using custom microcode optimizers.
